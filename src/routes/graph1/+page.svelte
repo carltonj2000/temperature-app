@@ -1,6 +1,6 @@
 <script>
 	import Barchart from './Barchart.svelte';
-	import data from './pop.js';
+	import data from './pop';
 </script>
 
 <h1>Bar Chart</h1>
@@ -13,4 +13,17 @@
 	article.
 </p>
 
-<Barchart {data} />
+<div class="container">
+	<Barchart {data} />
+</div>
+
+<style>
+	:global(.chart) {
+		width: 100%;
+		min-width: 600px;
+		max-width: 1200px;
+	}
+	.container {
+		overflow-x: auto;
+	}
+</style>

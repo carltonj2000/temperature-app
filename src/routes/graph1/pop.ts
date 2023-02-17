@@ -1,3 +1,8 @@
+export interface CPOPT {
+  country: string;
+  population: number;
+}
+
 export default [
   { country: 'China', population: 1439324 },
   { country: 'India', population: 1380004 },
@@ -9,4 +14,4 @@ export default [
   { country: 'Bangladesh', population: 164689 },
   { country: 'Russian Federation', population: 145934 },
   { country: 'Mexico', population: 128933 }
-];
+] as CPOPT[];

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { scaleBand, scaleLinear } from 'd3-scale';
-
-	export let data;
+	import type { CPOPT } from './pop';
+	export let data: CPOPT[];
 
 	const width = 800;
 	const height = 600;

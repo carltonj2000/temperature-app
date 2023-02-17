@@ -26,7 +26,7 @@
 					<input type="hidden" name="dir" value={dir} />
 					<button>{dir}</button>
 				</form>
-				<button>graph</button>
+				<a href={`graph/{dir}`}>Graph</a>
 			</div>
 		{/each}
 	</div>
@@ -69,12 +69,13 @@
 		gap: 1rem;
 		margin-bottom: 1rem;
 	}
-	.graphs a {
+	a {
 		padding: 0.5rem 1rem;
 		color: white;
 		background: gray;
 		border-radius: 0.5rem;
 		text-decoration: none;
+		text-align: center;
 	}
 	.side-by-side {
 		display: flex;

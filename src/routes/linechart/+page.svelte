@@ -1,8 +1,9 @@
 <!-- 
 Svelted version of Exercise 2 of Front End Masters course Introduction to Data Visualization with d3.js v4 by Shirley Wu
 https://frontendmasters.com/courses/d3-v4/
+https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 -->
-<script lang="ts">
+<script lang="ts" context="module">
 	import {
 		line,
 		curveStep,
@@ -12,9 +13,7 @@ https://frontendmasters.com/courses/d3-v4/
 		scaleTime
 	} from 'd3';
 	import { default as din } from './data.js';
-	import type { TMPT } from './data.js';
-
-	let el;
+	// import BoxInner from './BoxInner.svelte';
 
 	const monthNames = [
 		'Jan',
@@ -30,40 +29,45 @@ https://frontendmasters.com/courses/d3-v4/
 		'Nov',
 		'Dec'
 	];
-	var width = 800;
-	var height = 300;
-	var margin = { top: 20, bottom: 20, left: 20, right: 20 };
+	let width = 800;
+	let height = 300;
+	export type marginType = {
+		top: number;
+		bottom: number;
+		left: number;
+		right: number;
+	};
+	let margin = { top: 20, bottom: 20, left: 20, right: 20 };
 
 	type DATAT = {
-		date: Date | null;
+		date: Date;
 		temp: number;
 	};
 
 	const data: DATAT[] = din.map((d) => {
-		const date = timeParse('%Y%m%d')(d.date);
+		const date = timeParse('%Y%m%d')(d.date)!;
 		const temp = Number(d.austin);
 		return { date, temp };
 	});
 
 	// scales
-	let extentX: Date[] = extent(data, (d) => d.date);
+	let extentX = <[Date, Date]>extent(data, (d) => d.date);
 	let xScale = scaleTime()
 		.domain(extentX)
 		.range([margin.left, width - margin.right]);
 
-	let extentY: number[] = extent(data, (d) => d.temp);
+	let extentY = <[number, number]>extent(data, (d) => d.temp);
 	let yScale = scaleLinear()
 		.domain(extentY)
 		.range([height - margin.bottom, margin.top]);
 
-	console.log(extentX, extentY);
-	let path = line()
+	let path = line<DATAT>()
 		.x((d) => xScale(d.date))
 		.y((d) => yScale(d.temp))
 		.curve(curveStep);
 
 	// ticks for x axis - first day of each month found in the data
-	let xTicks = [];
+	let xTicks: Date[] = [];
 	data.forEach((d) => {
 		if (d.date.getDate() == 1) {
 			xTicks.push(d.date);
@@ -71,13 +75,10 @@ https://frontendmasters.com/courses/d3-v4/
 	});
 
 	// x axis labels string formatting
-	let xLabel = (x) =>
-		monthNames[x.getMonth()] +
-		' 20' +
-		x.getYear().toString().substring(x.getYear(), 1);
+	let xLabel = (x: Date) => monthNames[x.getMonth()] + ' ' + x.getFullYear();
 
 	// y ticks count to label by 5's
-	let yTicks = [];
+	let yTicks: number[] = [];
 	for (
 		let i = Math.round(extentY[0]);
 		i < Math.round(extentY[1] + 1);
@@ -87,15 +88,12 @@ https://frontendmasters.com/courses/d3-v4/
 	}
 
 	// d's for axis paths
-	let xPath = `M${margin.left + 0.5},6V0H${width - margin.right + 1}V6`;
-	let yPath = `M-6,${height + 0.5}H0.5V0.5H-6`;
-	/*
-	 */
+	let xPath = `M${margin.left},0H${width - margin.right / 2}`;
+	let yPath = `M0,${height - margin.bottom + 2}V${margin.top / 2}`;
 </script>
 
 <h1>SVG Here</h1>
-
-<svg bind:this={el} transform="translate({margin.left}, {margin.top})">
+<svg {width} {height} transform="translate({margin.left}, {margin.top})">
 	<g>
 		<path d={path(data)} fill="none" stroke="blue" />
 	</g>
@@ -113,7 +111,7 @@ https://frontendmasters.com/courses/d3-v4/
 		{/each}
 	</g>
 
-	<g transform="translate(0, {height})">
+	<g transform="translate(0, {height - margin.bottom + 2})">
 		<path stroke="currentColor" d={xPath} fill="none" />
 
 		{#each xTicks as x}
@@ -124,14 +122,10 @@ https://frontendmasters.com/courses/d3-v4/
 				</text>
 			</g>
 		{/each}
-	</g></svg
->
+	</g>
+</svg>
 
 <style>
-	svg {
-		width: 100%;
-		height: 340px;
-	}
 	.tick {
 		font-size: 11px;
 	}
