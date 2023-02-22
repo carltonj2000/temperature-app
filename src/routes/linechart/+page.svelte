@@ -37,7 +37,7 @@ https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 		left: number;
 		right: number;
 	};
-	let margin = { top: 20, bottom: 20, left: 20, right: 20 };
+	let margin = { top: 10, bottom: 30, left: 30, right: 10 };
 
 	type DATAT = {
 		date: Date;
@@ -94,6 +94,7 @@ https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 
 <h1>SVG Here</h1>
 <svg {width} {height} transform="translate({margin.left}, {margin.top})">
+	<!-- <BoxInner {height} {width} {margin} /> -->
 	<g>
 		<path d={path(data)} fill="none" stroke="blue" />
 	</g>
@@ -104,7 +105,7 @@ https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 		{#each yTicks as y}
 			<g class="tick" opacity="1" transform="translate(0,{yScale(y)})">
 				<line stroke="currentColor" x2="-5" />
-				<text dy="0.32em" fill="currentColor" x="-{margin.left}">
+				<text dy="0.32em" fill="currentColor" x="-1.75em">
 					{y}
 				</text>
 			</g>
@@ -117,7 +118,7 @@ https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 		{#each xTicks as x}
 			<g class="tick" opacity="1" transform="translate({xScale(x)},0)">
 				<line stroke="currentColor" y2="6" />
-				<text fill="currentColor" y="9" dy="0.71em" x="-{margin.left}">
+				<text fill="currentColor" y="9" dy="0.71em" x="-1.5em">
 					{xLabel(x)}
 				</text>
 			</g>
@@ -127,6 +128,6 @@ https://svelte.dev/repl/8262eb73a08f48adba8e0b706c1a939f?version=3.22.1
 
 <style>
 	.tick {
-		font-size: 11px;
+		font-size: 12px;
 	}
 </style>

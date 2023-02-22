@@ -26,7 +26,7 @@
 					<input type="hidden" name="dir" value={dir} />
 					<button>{dir}</button>
 				</form>
-				<a href={`graph/{dir}`}>Graph</a>
+				<a href={`graph/${dir}`}>Graph</a>
 			</div>
 		{/each}
 	</div>

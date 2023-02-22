@@ -1,8 +1,7 @@
 import type { Actions } from '@sveltejs/kit';
-import { readFile, readdir, writeFile } from 'fs/promises';
+import { readdir, writeFile } from 'fs/promises';
 import path from 'path';
-
-const mainDir = '/renderws/carltonData/cj2023/code/temperature';
+import { mainDir, getFile } from './utils';
 
 export async function load() {
   const dd = await readdir(mainDir);
@@ -18,20 +17,7 @@ const getDatasets = async (subDir: string) => {
   const filesAll = await readdir(subDir);
   const files = filesAll.filter((f) => f.match(/.*[-_]data.csv$/));
   const datasets = await Promise.all(
-    files.map(async (file) => {
-      const data = await readFile(path.join(subDir, file));
-      //const lines = data.toString().split('\n').slice(1, 5);
-      const lines = data.toString().trim().split('\n');
-      lines.shift();
-      const json = lines.map((l) => {
-        const tth = l.split(',');
-        const time = tth[0].replaceAll('"', '');
-        const temperature = Number(tth[1].replaceAll('"', ''));
-        const humidity = Number(tth[2].replaceAll('"', ''));
-        return { time, temperature, humidity };
-      });
-      return { file, json };
-    })
+    files.map(async (file) => await getFile(subDir, file))
   );
   return datasets;
 };
@@ -203,6 +189,11 @@ export const actions: Actions = {
     const jsonif = jsonC2f(jsoni);
     const table = tableData(jsonif);
     await writeFile(path.join(subDir, 'merged.csv'), table.join('\n'), 'utf-8');
+    await writeFile(
+      path.join(subDir, 'merged.json'),
+      JSON.stringify(jsonif, null, 2),
+      'utf-8'
+    );
     return { success: true, datasets, json, jsoni, jsonif, table };
   }
 };
