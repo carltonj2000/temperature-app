@@ -12,46 +12,69 @@
 
 	export let din: dateFileTthType;
 
-	let width = 800;
-	let height = 300;
-	let margin = { top: 10, bottom: 30, left: 40, right: 5 };
+	const width = 800;
+	const height = 300;
+	const margin = { top: 10, bottom: 30, left: 40, right: 5 };
 
 	type DATAT = {
 		date: Date;
-		temp: number;
+		temp: number[];
 	};
 
 	const data: DATAT[] = din.tth.map((d) => {
 		const date = timeParse('%Y-%m-%d %H:%M:%S')(d.time)!;
-		const temp = Number(d.temperature.td);
+		const temp = [
+			Number(d.temperature.cj),
+			Number(d.temperature.td),
+			Number(d.humidity.cj),
+			Number(d.humidity.td)
+		];
 		return { date, temp };
 	});
 
 	// scales
-	let extentX = <[Date, Date]>extent(data, (d) => d.date);
-	let xScale = scaleTime()
+	const extentX = <[Date, Date]>extent(data, (d) => d.date);
+	const xScale = scaleTime()
 		.domain(extentX)
 		.range([margin.left, width - margin.right]);
 
-	let extentY = <[number, number]>extent(data, (d) => d.temp);
-	let yScale = scaleLinear()
+	const extentY_0 = <[number, number]>extent(data, (d) => d.temp[0]);
+	const extentY_1 = <[number, number]>extent(data, (d) => d.temp[1]);
+	const extentY_2 = <[number, number]>extent(data, (d) => d.temp[2]);
+	const extentY_3 = <[number, number]>extent(data, (d) => d.temp[3]);
+	const extentY0 = Math.min(
+		extentY_0[0],
+		extentY_1[0],
+		extentY_2[0],
+		extentY_3[0]
+	);
+	const extentY1 = Math.max(
+		extentY_0[1],
+		extentY_1[1],
+		extentY_2[1],
+		extentY_3[1]
+	);
+	const extentY = [extentY0, extentY1];
+
+	const yScale = scaleLinear()
 		.domain(extentY)
 		.range([height - margin.bottom, margin.top]);
 
-	let path = line<DATAT>()
-		.x((d) => xScale(d.date))
-		.y((d) => yScale(d.temp))
-		.curve(curveStep);
+	const path = (i: number) =>
+		line<DATAT>()
+			.x((d) => xScale(d.date))
+			.y((d) => yScale(d.temp[i]))
+			.curve(curveStep);
 
 	// ticks for x axis
 	const dx = (+extentX[1] - +extentX[0]) / 10;
-	let xTicks: Date[] = [];
+	const xTicks: Date[] = [];
 	for (let i = +extentX[0]; i < +extentX[1] + dx; i = i + dx) {
 		xTicks.push(new Date(i));
 	}
 
 	// x axis labels string formatting
-	let xLabel = (x: Date) =>
+	const xLabel = (x: Date) =>
 		x.getMonth() +
 		1 +
 		'/' +
@@ -63,20 +86,23 @@
 
 	// y ticks count to label by dy
 	const dy = (extentY[1] - extentY[0]) / 10;
-	let yTicks: number[] = [];
+	const yTicks: number[] = [];
 	for (let i = extentY[0]; i < extentY[1] + dy; i = i + dy) {
 		yTicks.push(Math.round(i * 100) / 100);
 	}
 	// d's for axis paths
-	let xPath = `M${margin.left},0H${width - margin.right / 2}`;
-	let yPath = `M0,${height - margin.bottom + 2}V${margin.top / 2}`;
+	const xPath = `M${margin.left},0H${width - margin.right / 2}`;
+	const yPath = `M0,${height - margin.bottom + 2}V${margin.top / 2}`;
 </script>
 
 <div>
 	<h1>SVG Here</h1>
 	<svg {width} {height} transform="translate({margin.left}, {margin.top})">
 		<g>
-			<path d={path(data)} fill="none" stroke="blue" />
+			<path d={path(0)(data)} fill="none" stroke="blue" />
+			<path d={path(1)(data)} fill="none" stroke="green" />
+			<path d={path(2)(data)} fill="none" stroke="pink" />
+			<path d={path(3)(data)} fill="none" stroke="orange" />
 		</g>
 
 		<g transform="translate({margin.left}, 0)">
