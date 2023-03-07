@@ -9,7 +9,12 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"db:start": "./scripts/postgres-docker.sh",
+		"db:stop": "docker stop local-postgres &> /dev/null",
+		"db:rm": "docker rm local-postgres &> /dev/null",
+		"db:restart": "npm run db:stop && npm run db:rm && npm run db:start",
+		"viewdb": "./scripts/adminer.sh"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -30,6 +35,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"d3": "^7.8.2"
+		"connection-string": "^4.3.6",
+		"d3": "^7.8.2",
+		"pg-promise": "^11.3.0",
+		"postgres": "^3.3.3"
 	}
 }

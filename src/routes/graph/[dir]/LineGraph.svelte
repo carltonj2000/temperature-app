@@ -96,7 +96,7 @@
 </script>
 
 <div>
-	<h1>SVG Here</h1>
+	<h1>{din.dir}</h1>
 	<svg {width} {height} transform="translate({margin.left}, {margin.top})">
 		<g>
 			<path d={path(0)(data)} fill="none" stroke="blue" />

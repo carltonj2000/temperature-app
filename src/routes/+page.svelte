@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import type { Actions, PageData } from './$types';
 
 	export let form: Actions;
@@ -13,24 +14,26 @@
 
 <h1 on:click={togglehideAll} on:keyup={togglehideAll}>Temperature Data</h1>
 
+{#if data}
+	<div class="dirs">
+		{#each data.dirs as dir}
+			<form method="POST" use:enhance>
+				<div class="dir">
+					<button formaction="?/insert1">Insert 1</button>
+					<button formaction="?/selectall">Select All</button>
+				</div>
+				<input type="hidden" name="dir" value={dir} />
+				<button formaction="?/merge">{dir}</button>
+				<a href={`graph/${dir}`}>Graph</a>
+			</form>
+		{/each}
+	</div>
+{/if}
+
 <div class="graphs">
 	<a href="graph1">Bar Chart</a>
 	<a href="linechart">Line Chart</a>
 </div>
-
-{#if data}
-	<div class="dirs">
-		{#each data.dirs as dir}
-			<div class="dir">
-				<form method="POST">
-					<input type="hidden" name="dir" value={dir} />
-					<button>{dir}</button>
-				</form>
-				<a href={`graph/${dir}`}>Graph</a>
-			</div>
-		{/each}
-	</div>
-{/if}
 
 {#if hideAll}
 	<p>Click Title To Show/Hide Data</p>
