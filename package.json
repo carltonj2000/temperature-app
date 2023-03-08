@@ -14,9 +14,10 @@
 		"db:stop": "docker stop local-postgres &> /dev/null",
 		"db:rm": "docker rm local-postgres &> /dev/null",
 		"db:restart": "npm run db:stop && npm run db:rm && npm run db:start",
-		"viewdb": "./scripts/adminer.sh"
+		"db:view": "./scripts/adminer.sh"
 	},
 	"devDependencies": {
+		"@skeletonlabs/skeleton": "^0.132.5",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@types/d3": "^7.4.0",
@@ -31,7 +32,12 @@
 		"svelte-check": "^3.0.1",
 		"tslib": "^2.4.1",
 		"typescript": "^4.9.3",
-		"vite": "^4.0.0"
+		"vite": "^4.0.0",
+		"postcss": "^8.4.14",
+		"postcss-load-config": "^4.0.1",
+		"svelte-preprocess": "^4.10.7",
+		"autoprefixer": "^10.4.7",
+		"tailwindcss": "^3.1.5"
 	},
 	"type": "module",
 	"dependencies": {
