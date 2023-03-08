@@ -1,6 +1,6 @@
 import { readdir, writeFile } from 'fs/promises';
 import path from 'path';
-import { mainDir, getFile } from './utils';
+import { mainDir, getFile } from '../utils';
 
 const getDatasets = async (subDir: string) => {
   const filesAll = await readdir(subDir);

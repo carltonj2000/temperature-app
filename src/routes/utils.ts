@@ -24,7 +24,7 @@ export const getFile = async (
   const data = await readFile(path.join(subDir, file));
   //const lines = data.toString().trim().split('\n').slice(1, 10);
   const lines = data.toString().trim().split('\n');
-  lines.shift();
+  lines.shift(); // get rid of header line
   const json = lines.map((l) => {
     const tth = l.split(',');
     const time = tth[0].replaceAll('"', '');
