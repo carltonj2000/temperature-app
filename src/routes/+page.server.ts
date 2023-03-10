@@ -1,17 +1,25 @@
 import type { Actions } from '@sveltejs/kit';
-import { readdir } from 'fs/promises';
 import { mainDir, getFile } from './utils';
-import { selectAll, insert1, insertbulk1 } from '$lib/server/postgres';
+import {
+  selectAll,
+  insert1,
+  insertbulk1,
+  maxDate,
+  minDate,
+  selectDateRange
+} from '$lib/server/postgres';
 import path from 'path';
 
 export async function load() {
-  const dd = await readdir(mainDir);
-  const regex = new RegExp('^temperature([0-9]{8}$)');
-  const dirs = dd
-    .filter((d) => regex.test(d))
-    .map((d) => regex.exec(d)![1])
-    .sort((a, b) => Number(b) - Number(a));
-  return { dirs };
+  const start = new Date(2023, 1, 14, 18, 0).toISOString();
+  const end = new Date(2023, 1, 14, 19, 0).toISOString();
+  const cj = await selectDateRange(start, end, 'cj');
+  const tdr = await selectDateRange(start, end, 'tdr');
+  return {
+    minDate: await minDate(),
+    maxDate: await maxDate(),
+    tnh: { cj, tdr }
+  };
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -58,8 +66,8 @@ export const actions: Actions = {
   },
   insertbulk1: async () => {
     try {
-      const fileDir = path.join(mainDir, 'temperature20230212');
-      const { json } = await getFile(fileDir, 'Cj-data.csv');
+      const fileDir = path.join(mainDir, 'temperature20230308');
+      const { json } = await getFile(fileDir, 'Cj_data.csv');
       const jd = json.map((j) => ({ ...j, time: new Date(j.time) }));
       const result = await insertbulk1(jd, 'cj');
       return {

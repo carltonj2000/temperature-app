@@ -17,6 +17,18 @@ export type tthx2Type = {
 export type tthType = { time: string; temperature: number; humidity: number };
 export type fileTthType = { file: string; json: tthType[] };
 
+export type dnchType = {
+  date: string;
+  name: string;
+  celsius: number;
+  humidity: number;
+};
+
+export type dnchX2Type = {
+  cj?: dnchType[];
+  tdr?: dnchType[];
+};
+
 export const getFile = async (
   subDir: string,
   file: string
@@ -25,7 +37,8 @@ export const getFile = async (
   //const lines = data.toString().trim().split('\n').slice(1, 10);
   const lines = data.toString().trim().split('\n');
   lines.shift(); // get rid of header line
-  const json = lines.map((l) => {
+  const json = lines.map((lin) => {
+    const l = lin.replaceAll('下午', 'PM').replaceAll('上午', 'AM');
     const tth = l.split(',');
     const time = tth[0].replaceAll('"', '');
     const temperature = Number(tth[1].replaceAll('"', ''));

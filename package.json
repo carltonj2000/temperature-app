@@ -10,11 +10,17 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"db:start": "./scripts/postgres-docker.sh",
+		"db:boot": "./scripts/postgres-docker.sh",
 		"db:stop": "docker stop local-postgres &> /dev/null",
+		"db:start": "docker start local-postgres &> /dev/null",
 		"db:rm": "docker rm local-postgres &> /dev/null",
-		"db:restart": "npm run db:stop && npm run db:rm && npm run db:start",
-		"db:view": "./scripts/adminer.sh"
+		"db:restart": "npm run db:stop && npm run db:rm && npm run db:boot",
+		"db:view:boot": "./scripts/adminer.sh",
+		"db:view:stop": "docker stop adminer &> /dev/null",
+		"db:view:start": "docker start adminer &> /dev/null",
+		"db:view:rm": "docker rm adminer &> /dev/null",
+		"db:view:restart": "npm run db:view:stop && npm run db:view:rm && npm run db:view:boot",
+		"db:group:start": "npm run db:start && npm run db:view:start"
 	},
 	"devDependencies": {
 		"@skeletonlabs/skeleton": "^0.132.5",
@@ -23,27 +29,25 @@
 		"@types/d3": "^7.4.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
+		"autoprefixer": "^10.4.7",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"postcss": "^8.4.14",
+		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
+		"svelte-preprocess": "^4.10.7",
+		"tailwindcss": "^3.1.5",
 		"tslib": "^2.4.1",
 		"typescript": "^4.9.3",
-		"vite": "^4.0.0",
-		"postcss": "^8.4.14",
-		"postcss-load-config": "^4.0.1",
-		"svelte-preprocess": "^4.10.7",
-		"autoprefixer": "^10.4.7",
-		"tailwindcss": "^3.1.5"
+		"vite": "^4.0.0"
 	},
 	"type": "module",
 	"dependencies": {
-		"connection-string": "^4.3.6",
 		"d3": "^7.8.2",
-		"pg-promise": "^11.3.0",
-		"postgres": "^3.3.3"
+		"pg-promise": "^11.3.0"
 	}
 }

@@ -1,8 +1,12 @@
 <script lang="ts">
-	import type { marginType } from './+page.svelte';
 	export let width: number;
 	export let height: number;
-	export let margin: marginType;
+	export let margin: {
+		top: number;
+		bottom: number;
+		left: number;
+		right: number;
+	};
 	const lo = 2; // left inset
 	const ro = 2; // left inset
 	const bo = 2; // bottom offset
