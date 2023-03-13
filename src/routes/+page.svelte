@@ -5,9 +5,14 @@
 	import GraphDb from './graphdb/index.svelte';
 	export let form: Actions;
 	export let data: PageData;
+
+	const tc = 'green'; // temperature color
+	const hc = 'yellow'; // humidity color
+	const c1 = 'black'; // group 1 color
+	const c2 = 'red'; // group 2 color
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col items-center">
 	<div class="mt-3 flex flex-row gap-3 mb-3">
 		<form method="post" use:enhance>
 			<!-- <button formaction="?/insert1" class="btn variant-filled-primary"> -->
@@ -47,5 +52,11 @@
 		{new Date(data.maxDate).toUTCString()}
 	</h4>
 
-	<GraphDb dnchX2={data.tnh} />
+	<p>
+		<span style="color: {tc}">Temperature</span>
+		<span style="color: {hc}">Humidity</span>
+		<span style="color: {c1}">Sensor 1 cj</span>
+		<span style="color: {c2}">Sensor 2 tdr</span>
+	</p>
+	<GraphDb dnchX2={data.tnh} {tc} {hc} {c1} {c2} />
 </div>
