@@ -11,6 +11,7 @@ function sql(file: string) {
 }
 
 export const temperature = {
+  clearTable: sql('sql/temperature/clearTable.sql'),
   insert1: sql('sql/temperature/insert1.sql'),
   selectAll: sql('sql/temperature/selectAll.sql'),
   maxDate: sql('sql/temperature/maxDate.sql'),

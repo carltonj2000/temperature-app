@@ -20,7 +20,7 @@
 		"db:view:start": "docker start adminer &> /dev/null",
 		"db:view:rm": "docker rm adminer &> /dev/null",
 		"db:view:restart": "npm run db:view:stop && npm run db:view:rm && npm run db:view:boot",
-		"db:group:start": "npm run db:start && npm run db:view:start"
+		"db:group:start": "npm run db:start && sleep 1 && npm run db:view:start"
 	},
 	"devDependencies": {
 		"@skeletonlabs/skeleton": "^0.132.5",

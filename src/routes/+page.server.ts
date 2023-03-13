@@ -1,7 +1,8 @@
 import type { Actions } from '@sveltejs/kit';
-import { mainDir, getFile } from './utils';
+import { mainDir, getFile, type tthType } from './utils';
 import {
   selectAll,
+  clearTable,
   insert1,
   insertbulk1,
   maxDate,
@@ -25,6 +26,15 @@ export async function load() {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const actions: Actions = {
+  clearTable: async () => {
+    try {
+      const result = await clearTable();
+      return { success: true, result };
+    } catch (error) {
+      console.error(error);
+      return { success: false };
+    }
+  },
   insert1: async () => {
     try {
       const result = await insert1(new Date(Date.now()));
@@ -66,19 +76,34 @@ export const actions: Actions = {
   },
   insertbulk1: async () => {
     try {
-      const fileDir = path.join(mainDir, 'temperature20230308');
-      const { json } = await getFile(fileDir, 'Cj_data.csv');
-      const jd = json.map((j) => ({ ...j, time: new Date(j.time) }));
-      const result = await insertbulk1(jd, 'cj');
+      const { json, result, jd } = await insertBulk1(
+        'temperature20230308',
+        'Cj_data.csv',
+        'cj'
+      );
+      const {
+        json: json2,
+        result: result2,
+        jd: jd2
+      } = await insertBulk1('temperature20230308', 'Tdr_data.csv', 'tdr');
       return {
         success: true,
-        json: json.slice(0, 10),
         result,
-        jd: jd.slice(0, 10)
+        result2,
+        json: [...json.slice(0, 2), ...json2.slice(0, 2)],
+        jd: [...jd.slice(0, 2), ...jd2.slice(0, 2)]
       };
     } catch (error) {
       console.error(error);
       return { success: false };
     }
   }
+};
+
+const insertBulk1 = async (subDir: string, file: string, name: string) => {
+  const fileDir = path.join(mainDir, subDir);
+  const { json } = await getFile(fileDir, file);
+  const jd: tthType[] = json.map((j) => ({ ...j, date: new Date(j.date) }));
+  const result = await insertbulk1(jd, name);
+  return { json, result, jd };
 };

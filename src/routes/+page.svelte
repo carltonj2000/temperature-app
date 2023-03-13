@@ -10,17 +10,20 @@
 <div class="flex flex-col">
 	<div class="mt-3 flex flex-row gap-3 mb-3">
 		<form method="post" use:enhance>
-			<button formaction="?/insert1" class="btn variant-filled-primary">
-				Insert 1
-			</button>
-			<button formaction="?/selectall" class="btn variant-filled-primary">
-				Select All
-			</button>
-			<button formaction="?/insertnselect" class="btn variant-filled-primary">
-				Insert And Select
-			</button>
+			<!-- <button formaction="?/insert1" class="btn variant-filled-primary"> -->
+			<!-- 	Insert 1 -->
+			<!-- </button> -->
+			<!-- <button formaction="?/selectall" class="btn variant-filled-primary"> -->
+			<!-- 	Select All -->
+			<!-- </button> -->
+			<!-- <button formaction="?/insertnselect" class="btn variant-filled-primary"> -->
+			<!-- 	Insert And Select -->
+			<!-- </button> -->
 			<button formaction="?/insertbulk1" class="btn variant-filled-primary">
 				Insert Bulk
+			</button>
+			<button formaction="?/clearTable" class="btn variant-filled-primary">
+				Clear Table
 			</button>
 		</form>
 	</div>
@@ -39,9 +42,9 @@
 
 	<h4>
 		DB data from
-		{new Date(data.minDate).toLocaleString()}
+		{new Date(data.minDate).toUTCString()}
 		to
-		{new Date(data.maxDate).toLocaleString()}
+		{new Date(data.maxDate).toUTCString()}
 	</h4>
 
 	<GraphDb dnchX2={data.tnh} />

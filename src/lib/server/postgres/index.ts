@@ -26,14 +26,13 @@ export const insert1 = async (date: Date) => {
   await db.none(temperature.insert1, [date, 'cj', 23.1, 79]);
 };
 
+export const clearTable = async () => {
+  await db.none(temperature.clearTable);
+};
+
 export const insertbulk1 = async (json: tthType[], name: string) => {
   const cs = new pgp.helpers.ColumnSet(
-    [
-      { name: 'date', prop: 'time' },
-      { name: 'name', def: name },
-      { name: 'celsius', prop: 'temperature' },
-      'humidity'
-    ],
+    ['date', { name: 'name', def: name }, 'celsius', 'humidity'],
     { table: 'temperature' }
   );
   const insert = pgp.helpers.insert(json, cs);

@@ -14,7 +14,7 @@ export type tthx2Type = {
     td: number;
   };
 };
-export type tthType = { time: string; temperature: number; humidity: number };
+export type tthType = { date: string; celsius: number; humidity: number };
 export type fileTthType = { file: string; json: tthType[] };
 
 export type dnchType = {
@@ -40,10 +40,10 @@ export const getFile = async (
   const json = lines.map((lin) => {
     const l = lin.replaceAll('下午', 'PM').replaceAll('上午', 'AM');
     const tth = l.split(',');
-    const time = tth[0].replaceAll('"', '');
-    const temperature = Number(tth[1].replaceAll('"', ''));
+    const date = tth[0].replaceAll('"', '');
+    const celsius = Number(tth[1].replaceAll('"', ''));
     const humidity = Number(tth[2].replaceAll('"', ''));
-    return { time, temperature, humidity };
+    return { date, celsius, humidity };
   });
   return { file, json };
 };
